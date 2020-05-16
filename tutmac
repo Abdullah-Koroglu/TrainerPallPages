@@ -1,0 +1,169 @@
+ datalarial = () =>{
+        for(let a of state[1].datas){
+            console.log(a.instants)
+            instants.push(a.instants)
+        }
+        for(let a of instants){
+            tutmac.push(a.maxHR)
+            tutmac1.push(a.minHR)
+        }
+        setdeger(tutmac)
+        setdeger1(tutmac1)
+     }
+
+      {/* <LineChart
+  data={{
+    labels: label,
+    datasets: [
+      {
+        data: deger,
+      },{
+          data : deger1
+        },
+        {
+            data : clientHRs
+        }
+    ],
+  }}
+  width={Dimensions.get('window').width } // from react-native
+  height={220}
+verticalLabelRotation={90}
+paddingLeft={0}
+withInnerLines={false}
+showBarTops={true}
+  chartConfig={{
+    backgroundColor: "#b210ab",
+    backgroundGradientFrom: "#b210ab",
+    backgroundGradientTo: "#b210ab",
+    decimalPlaces: 0, // optional, defaults to 2dp
+    color: (opacity = 0) => `rgba(255, 255, 255, 0.67)`,
+    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+    strokeWidth:1.6,
+    style: {
+      borderRadius: 16
+    },
+    propsForDots: {
+      r: "0",
+      strokeWidth: "12",
+    }
+  }}
+/>      */}
+
+
+const navigator = createStackNavigator({
+    Index         : {screen:IndexScreen, options:{title:'my'}},
+    Select        : {screen:TempSelectScreen, options:{title:'my'}},
+    Test          : {screen:TestScreen, options:{title:'my'}},
+    SaveWorkout   : {screen:SaveWorkoutScreen, options:{title:'my'}}
+},{
+    initialRouteName:'Test',
+    defaultNavigationOptions:{
+        headerStyle: {
+            backgroundColor: '#b210ab',
+          },
+          headerTintColor: '#fff'
+    },
+    headerTitleStyle: {
+        fontWeight: 'bold',
+        alignSelf:'center'
+      },
+})
+
+
+const switchNavigator = createSwitchNavigator({
+    loginFlow:createSwitchNavigator({
+        Signup: SignupScreen,
+        Signin: SigninScreen
+    }),
+    mainFlow:createBottomTabNavigator({
+        workoutListFlow:createStackNavigator({
+            MyWorkouts      : MyWorkoutsListScreen,
+            MyWorkoutDetail : MyWorkoutDetailScreen
+    }),
+        idmanFlow:createSwitchNavigator({
+            tempFlow:createStackNavigator({
+                TempSelect : TempSelectScreen,
+                CreateTemp : CreateTempScreen
+              }),
+              workoutFlow:createStackNavigator({
+                Index       : IndexScreen,
+                SaveWorkout : SaveWorkoutScreen
+             })
+        })
+    }),
+    Account:AccountScreen
+  }
+)
+
+
+
+
+import React from 'react'
+import {createAppContainer, createSwitchNavigator} from 'react-navigation'
+import { createBottomTabNavigator } from "react-navigation-tabs";
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+//import {createStackNavigator} from 'react-navigation-stack'
+import {createStackNavigator} from '@react-navigation/stack';
+import {setNavigator} from './src/navigationRef'
+
+import {Provider as WorkoutProvider} from './src/context/WorkoutContext'
+import {Provider as TempProvider} from './src/context/TempContext'
+import {Provider as AuthProvider} from './src/context/AuthContext'
+
+import IndexScreen from './src/screens/IndexScreen'
+import TempSelectScreen from './src/screens/TempSelectScreen'
+import SignupScreen from './src/screens/SignupScreen'
+import SigninScreen from './src/screens/SigninScreen'
+import MyWorkoutsListScreen from './src/screens/MyWorkoutsListScreen'
+import MyWorkoutDetailScreen from './src/screens/MyWorkoutDetailScreen'
+import CreateTempScreen from './src/screens/CreateTempScreen'
+import AccountScreen from './src/screens/AccountScreen'
+import SaveWorkoutScreen from './src/screens/SaveWorkoutScreen'
+import { Switch } from 'react-native-paper';
+
+
+const switchNavigator = createSwitchNavigator({
+loginFlow:createSwitchNavigator({
+      Signup: SignupScreen,
+      Signin: SigninScreen
+}),
+mainFlow:createMaterialBottomTabNavigator({
+      workoutListFlow:createStackNavigator({
+          MyWorkouts      : MyWorkoutsListScreen,
+          MyWorkoutDetail : MyWorkoutDetailScreen
+},
+{defaultNavigationOptions:{headerStyle: {backgroundColor: '#b210ab',},headerTintColor: '#fff'}}
+),
+          tempFlow:createStackNavigator({
+              TempSelect  : TempSelectScreen,
+              CreateTemp  : CreateTempScreen,
+              Index       : IndexScreen,
+              SaveWorkout : SaveWorkoutScreen
+          },{ headerStyle: { backgroundColor: 'papayawhip' } , defaultNavigationOptions:{headerStyle: {backgroundColor: '#b210ab', },headerTintColor: '#fff'}}
+          ),
+      Profile:createStackNavigator({
+          Account:AccountScreen
+      },{defaultNavigationOptions:{headerStyle: {backgroundColor: '#b210ab', alignSelf:"center"},headerTintColor: '#000000'}}
+)
+},
+{inactiveColor:"#cccccc" ,focused: false, barStyle:{ backgroundColor: '#b210ab' }}
+)
+}
+)
+
+
+const App = createAppContainer(switchNavigator)
+
+export default() => {
+    return (
+        <AuthProvider>
+            <WorkoutProvider>
+                <TempProvider>
+                    <App ref= { (navigator) =>  setNavigator(navigator)}/>
+                </TempProvider>
+            </WorkoutProvider>
+        </AuthProvider>
+    )
+};
+
+
