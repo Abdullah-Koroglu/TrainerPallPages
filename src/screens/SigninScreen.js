@@ -1,5 +1,5 @@
 import React , {useContext} from 'react'
-import {View ,Text, StyleSheet,SafeAreaView,TouchableOpacity,Alert} from 'react-native'
+import {View ,Text, StyleSheet,SafeAreaView,TouchableOpacity,Alert } from 'react-native'
 import { Context } from '../context/AuthContext'
 
 import AuthForm from '../components/AuthForm'
@@ -15,9 +15,9 @@ const errorAlert = () => Alert.alert(
   )
   if(state.errorMessage !== '' ){errorAlert()} 
 
-    return(<View style={styles.container}>
+    return(<SafeAreaView style={styles.container}>
             <AuthForm 
-                headerText='Sign In For Tracker' 
+                headerText='Trainer Pall' 
                 submitButtonText='Sign In' 
                  onSubmit={({email,password}) =>signin({email,password})}
             >
@@ -25,14 +25,15 @@ const errorAlert = () => Alert.alert(
                 <Text style={styles.gotoButton}>Haven't signed up yet? Sign Up.</Text>
             </TouchableOpacity>
             </AuthForm>
-        </View>)
+        </SafeAreaView>)
 }
 
 const styles = StyleSheet.create({
     container:{
         flex:0.8,
         justifyContent:'center',
-        paddingHorizontal:10
+        paddingHorizontal:10,
+        marginTop:10
     },
     submitButton:{
         paddingTop:10,

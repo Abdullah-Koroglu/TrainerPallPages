@@ -2,7 +2,6 @@ import createDataContext from './createDataContext'
 import { createContext } from 'react';
 import trackerApi from "../api/tracker"
 import { AsyncStorage } from 'react-native';
-import { navigate } from "../navigationRef";
 
 const authReducer = (state,action) =>{
     switch (action.type) {
@@ -23,10 +22,7 @@ loginViaStored = dispatch =>{
     return async() =>{
         const token = await AsyncStorage.getItem('token')
         if(token){
-            navigate('mainFlow')
             dispatch({type:'signin' , payload:token})
-        }else{
-            navigate('Signup')
         }
     }
 } 
@@ -36,7 +32,6 @@ signup = dispatch => async ({email, password})=>{
             const response = await trackerApi.post('/signup',{email,password})
             await AsyncStorage.setItem('token',response.data.token)
             dispatch({type:'signin' , payload:response.data.token})
-            navigate('mainFlow')
         }catch(err){
             dispatch({type:'add_error' , payload:'Something went wrong  with sign up'})
             console.log(err.message)  
@@ -51,7 +46,6 @@ signin = dispatch =>{
             await AsyncStorage.setItem('token',response.data.token)
             dispatch({type:'signin' , payload:response.data.token})
             console.log(response.data.token)
-            navigate('mainFlow')
         }catch(err){
             dispatch({type:'add_error' , payload:'Something went wrong with sign in'})
             console.log(err.message)  
@@ -62,9 +56,7 @@ signin = dispatch =>{
 signout = dispatch =>{
     return async() =>{
         await AsyncStorage.removeItem('token')
-                navigate('Signup')
         dispatch({type : 'signout' })
-
     }
 }
 
@@ -76,6 +68,6 @@ clearError = dispatch =>{
 
 export const    { Provider , Context} = createDataContext(
     authReducer,
-    {signin, signup, signout,clearError , loginViaStored},
+    {signin, signup, signout,clearError  , loginViaStored},
     {token : null, errorMessage:'' }
 )

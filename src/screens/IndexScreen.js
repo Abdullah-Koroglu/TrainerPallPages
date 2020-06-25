@@ -40,11 +40,7 @@ IndexScreen = (props) => { // const instants = [];
     const [durations, setdurations] = useState([0])
 
     const {state} = useContext(TempContext)
-    const {
-        state: {
-            recording,
-            datas
-        },
+    const {state: {recording,datas},
         stopRecording,
         startRecording,
         addInstant,
@@ -54,6 +50,7 @@ IndexScreen = (props) => { // const instants = [];
 
     useEffect(() => {
         datalarial()
+        intervallama()
     }, [])
 
     datalarial = () => {
@@ -71,25 +68,16 @@ IndexScreen = (props) => { // const instants = [];
         setdeger1(tutmac1)
     }
 
-    startWorkout = () => {
-        startRecording();
-        time = timer
-        let endofworkot = durations.lastItem
-        durations.pop()
-
-        interval = setInterval(() => {
-            var instants = {
-                HR,
-                rpm,
-                time
-            }
+	intervallama= () =>{
+	interval = setInterval(() => {
+            console.log(recording)
+            if(recording === true){
+            var instants = {HR,rpm,time}
             addInstant({
                 instants: instants
             }, true)
-            console.log(durations)
             if (endofworkot === time) {
-                console.log("naber")
-                ToastAndroid.show("A pikachu appeared nearby !", ToastAndroid.SHORT);
+                ToastAndroid.show("idman sona erdi", ToastAndroid.SHORT);
             }
 
             if (durations.includes(time)) {
@@ -111,14 +99,19 @@ IndexScreen = (props) => { // const instants = [];
             }
             time++;
             settimer(time)
-        }, 1000);
+        }}, 1000)
+	}
 
-        stopWorkout = () => {
-            stopRecording()
-            clearInterval(interval)
-            console.log(interval)
-        }
+    baslat =()=>{
+       time = timer
+        let endofworkot = durations[durations.length-1]
+        durations.pop()
     }
+
+    startWorkout = React.useEffect(()=>{
+	       console.log("başla")
+   }, [recording] )
+    
 
 
     return (
@@ -141,7 +134,7 @@ IndexScreen = (props) => { // const instants = [];
                     </Text> : null
                 }
                     <Text style={styles.blogName}>
-                        Your Heart Rate {HR} </Text>
+            Your Heart Rate {HR}</Text>
                     {detrain === true ? 
                     <Text style={styles.blogName}>
                         increase
@@ -150,23 +143,23 @@ IndexScreen = (props) => { // const instants = [];
             </View>
             {recording ? 
                 <View style={styles.row}>
-                <TouchableOpacity onPress={() => {stopWorkout()}}>
+                <TouchableOpacity onPress={() => {stopRecording()}}>
                     <View style={styles.cycleButton}>
                         <Feather name='pause'size={36} color='white'/>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() =>
-                    // createWorkout("nabüyün" , datas)
+                <TouchableOpacity onPress={() =>{
+                    stopRecording();
                     props.navigation.navigate('SaveWorkout')
-                }>
+                }}>
                     <View style={styles.emptyCycleButton}>
-                        <Text style={{color: '#b210ab'}}>
+                        <Text style={{color: '#694fad'}}>
                             SAVE
                         </Text>
                     </View>
                 </TouchableOpacity>
             </View> : <View style={styles.row}>
-                <TouchableOpacity onPress={() => (startWorkout())}>
+                <TouchableOpacity onPress={() => {startRecording()}}>
                     <View style={styles.cycleButton}>
                         <Feather name='play' size={36} color='white'
                             style={styles.playButton}/>
@@ -215,7 +208,7 @@ const styles = StyleSheet.create({
         width: 78,
         height: 78,
         borderRadius: 100 / 2,
-        backgroundColor: '#b210ab',
+        backgroundColor: '#694fad',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -223,7 +216,7 @@ const styles = StyleSheet.create({
         width: 78,
         height: 78,
         borderRadius: 100 / 2,
-        borderColor: '#b210ab',
+        borderColor: '#694fad',
         borderWidth: 2,
         alignItems: 'center',
         justifyContent: 'center'

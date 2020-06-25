@@ -5,14 +5,23 @@ import { SafeAreaView } from "react-navigation";
 import { Context } from '../context/AuthContext'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-AccountScreen = () =>{
+AccountScreen = (props) =>{
     const {state , signout} = useContext(Context)
+
+    const navigate = () =>{
+        if(state.token === null){
+            props.navigation.navigate("Signin")
+            console.log(state.token)
+        }
+    } 
     return(<SafeAreaView forceInset={{top:'always'}}>
-        <TouchableOpacity onPress={signout}>
+        <TouchableOpacity onPress={()=>{signout()}}>
             <Text style={styles.sigoutButton}>signout</Text>
         </TouchableOpacity>
     </SafeAreaView>)
 }
+
+
 
 
 const styles = StyleSheet.create({

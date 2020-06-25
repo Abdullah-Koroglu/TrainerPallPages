@@ -1,4 +1,4 @@
-import React , {useContext} from 'react'
+import React , {useContext ,useEffect} from 'react'
 import {TouchableOpacity} from 'react-native'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack'
@@ -7,11 +7,12 @@ import {NavigationContainer,DefaultTheme,DarkTheme,} from '@react-navigation/nat
 import {MaterialCommunityIcons} from '@expo/vector-icons'
 import { SimpleLineIcons , Ionicons } from '@expo/vector-icons';
 import { Card } from 'react-native-paper';
+import {setNavigator } from './src/navigationRef'
 
 
 import {Provider as WorkoutProvider} from './src/context/WorkoutContext'
-import {Provider as TempProvider , Context as TempContext} from './src/context/TempContext'
-import {Provider as AuthProvider} from './src/context/AuthContext'
+import {Provider as TempProvider} from './src/context/TempContext'
+import {Provider as AuthProvider , Context as AuthContext} from './src/context/AuthContext'
 
 import IndexScreen from './src/screens/IndexScreen'
 import TempSelectScreen from './src/screens/TempSelectScreen'
@@ -29,9 +30,22 @@ const Tab = createMaterialBottomTabNavigator();
 
 const loginFlow =()=>{
   return (
-  <Stack.Navigator>
-            <Stack.Screen name="Signup" component={SignupScreen} />
-            <Stack.Screen name="Signin" component={SigninScreen} />
+  <Stack.Navigator
+  mode={"card"}
+  screenOptions={{
+    headerStyle:{
+      backgroundColor:'#694fad',
+    }
+  }}
+  >
+            <Stack.Screen name="Signup" component={SignupScreen} options={{
+      headerTitleAlign:"center",
+      headerTintColor:"white"
+    }}/>
+            <Stack.Screen name="Signin" component={SigninScreen} options={{
+      headerTitleAlign:"center",
+      headerTintColor:"white"
+    }}/>
       </Stack.Navigator>
       )
 }
@@ -112,7 +126,7 @@ function MyTabs() {
       <Tab.Screen name="tempFlow" component={tempFlow} options={{
           tabBarLabel: 'Burn',
           tabBarIcon: ({ color }) => (
-            <SimpleLineIcons name="fire" color={color} size={26} />
+            <SimpleLineIcons name="fire" color={color} size={24} />
           ),
         }}/>
       <Tab.Screen name="Account" component={AccountScreen} options={{
@@ -127,7 +141,10 @@ function MyTabs() {
 
 
 const App = function App() {
-  const {token} = useContext(TempContext)
+  const {state:{token} , loginViaStored} = useContext(AuthContext)
+  useEffect(() => {
+      loginViaStored()
+  }, [])
   return (
     <AppearanceProvider>
     <NavigationContainer >

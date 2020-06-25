@@ -56,6 +56,6 @@ reset = dispatch =>()=>{
 
 export const { Provider , Context } = createDataContext(
     trackReducer,
-    { fetchWorkout , createWorkout , startRecording , changeName , addInstant , stopRecording} ,
+    { fetchWorkout , reset , createWorkout , startRecording , changeName , addInstant , stopRecording} ,
     {recording : false , datas : [] , currentInstant : null ,  name : ""  , list: []}
 )

@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
         flex:0.8,
         justifyContent:'center',
         paddingBottom:200,
-        paddingHorizontal:10
+        paddingHorizontal:10,
+        paddingTop:45
     },
     submitButton:{
         paddingTop:10,
@@ -49,7 +50,8 @@ const styles = StyleSheet.create({
     headerText:{
         paddingBottom:13,
         fontWeight:'normal',
-        fontSize:50
+        fontSize:50,
+        alignSelf:"center"
     }
 
 })
