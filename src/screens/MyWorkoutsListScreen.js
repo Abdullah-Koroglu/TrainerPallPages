@@ -26,12 +26,14 @@ MyWorkoutsListScreen = (props) =>{
        })
    }, [refreshing])
 
-  // const deneme = React.useCallback(()=>{
-    //   startRecording()
-  // }, console.log(state.recording) , [state.recording])
+  const deneme = React.useCallback(()=>{
+      startRecording()
+  }
+  //, console.log(state.recording) 
+  , [state.recording])
 return(
     <View>
-        <Button title={"naber"} onPress={()=>deneme()} ></Button>
+        {/* <Button title={"naber"} onPress={()=>deneme()} ></Button> */}
         <ScrollView
             contentContainerStyle={styles.scrollView}
             refreshControl={

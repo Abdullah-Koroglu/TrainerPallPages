@@ -1,6 +1,5 @@
 import React , {useContext , useEffect, Component , useState} from 'react'
 import {View , Text, StyleSheet,Button,FlatList , TouchableOpacity , Dimensions} from 'react-native'
-import { Ionicons } from '@expo/vector-icons';
 import {Context as TempContext} from '../context/TempContext'
 
 TempSelectScreen = (props) =>{

@@ -7,6 +7,7 @@ CreateTempScreen = () =>{
     return(
     <SafeAreaView forceInset={{top:'always'}}>
             <Text style={styles.sigoutButton}>Create your custom Temps here</Text>
+            
     </SafeAreaView>
     )
 }

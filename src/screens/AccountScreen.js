@@ -14,22 +14,31 @@ AccountScreen = (props) =>{
             console.log(state.token)
         }
     } 
-    return(<SafeAreaView forceInset={{top:'always'}}>
-        <TouchableOpacity onPress={()=>{signout()}}>
-            <Text style={styles.sigoutButton}>signout</Text>
-        </TouchableOpacity>
-    </SafeAreaView>)
+    return(<View style={styles.container}>
+            <SafeAreaView forceInset={{top:'always'}}>
+                <TouchableOpacity onPress={()=>{signout()}}>
+                    <Text style={styles.sigoutButton}>signout</Text>
+                </TouchableOpacity>
+            </SafeAreaView>
+        </View>)
 }
 
 
 
 
 const styles = StyleSheet.create({
+    container:{
+        flexDirection:"column",
+        justifyContent:"center",
+        //alignContent:"center",
+        //backgroundColor:"black",
+        alignSelf:"center"
+    },
     sigoutButton:{
         paddingTop:10,
         color:'#98ceb7',
         fontSize:28,
-        alignSelf:'center'
+        //alignSelf:'center'
     }
 
 })

@@ -38,6 +38,11 @@ IndexScreen = (props) => { // const instants = [];
     let minHeartRate
     var interval;
     const [durations, setdurations] = useState([0])
+    let minute=0
+    let second=0
+    const [curminute, setminute] = useState(0)
+    const [cursecond, setsecond] = useState(0)
+    let hour=0
 
     const {state} = useContext(TempContext)
     const {state: {recording,datas},
@@ -50,7 +55,6 @@ IndexScreen = (props) => { // const instants = [];
 
     useEffect(() => {
         datalarial()
-        intervallama()
     }, [])
 
     datalarial = () => {
@@ -69,15 +73,16 @@ IndexScreen = (props) => { // const instants = [];
     }
 
 	intervallama= () =>{
-	interval = setInterval(() => {
-            console.log(recording)
-            if(recording === true){
+        time = timer
+        let endofworkot = durations[durations.length-1]
+        durations.pop()
+        myInterval = setInterval(() => {
             var instants = {HR,rpm,time}
             addInstant({
                 instants: instants
             }, true)
             if (endofworkot === time) {
-                ToastAndroid.show("idman sona erdi", ToastAndroid.SHORT);
+                ToastAndroid.show("idman sona erdi", ToastAndroid.LONG);
             }
 
             if (durations.includes(time)) {
@@ -97,27 +102,41 @@ IndexScreen = (props) => { // const instants = [];
                 myHRs.push(HR)
                 setclientHRs(myHRs)
             }
+            if(second === 60){
+                second = 0
+                setsecond(second);
+                minute ++
+                setminute(minute)
+            }
+            second ++;
+            setsecond(second);
             time++;
             settimer(time)
-        }}, 1000)
+        }, 100)
 	}
 
-    baslat =()=>{
-       time = timer
-        let endofworkot = durations[durations.length-1]
-        durations.pop()
-    }
-
+    const [baslatilmis, setbaslatilmis] = useState(0)
     startWorkout = React.useEffect(()=>{
-	       console.log("başla")
+           if(recording === true){
+            intervallama()
+            setbaslatilmis(1)
+           }
+            else{
+                if(baslatilmis ===1)
+                    clearInterval(myInterval)
+            }
    }, [recording] )
     
 
+   const {
+    width: SCREEN_WIDTH  } = Dimensions.get('window');
 
     return (
-        <View>
+        <View style={{
+            paddingTop:SCREEN_WIDTH/10
+        }}>
             <View style={styles.row}>
-                <Text style={styles.blogName}>Tur sayısı 1/4</Text>
+                <Text style={styles.blogName}>Tur sayısı {session}/{durations.length}</Text>
                 <Text style={styles.blogName}>85 RPM</Text>
             </View>
             <View style={styles.row}>
@@ -159,25 +178,27 @@ IndexScreen = (props) => { // const instants = [];
                     </View>
                 </TouchableOpacity>
             </View> : <View style={styles.row}>
-                <TouchableOpacity onPress={() => {startRecording()}}>
+                <TouchableOpacity onPress={() => {startRecording() }}>
                     <View style={styles.cycleButton}>
                         <Feather name='play' size={36} color='white'
                             style={styles.playButton}/>
                     </View>
                 </TouchableOpacity>
                     </View>}
-            <View style={styles.row}>
+            <View style={styles.row , {
+                justifyContent: 'center'
+            }}>
                 <Text style={{fontSize: 20}}></Text>
                 <Text style={styles.blogName}>
-                    Duration    20 : 43
+                    Duration    {curminute} : {cursecond}
                 </Text>
             </View>
-            <View style={styles.row}>
+            {/* <View style={styles.row}>
                 <Text style={styles.blogName}>
                     Session : {session} </Text>
                 <Text style={styles.blogName}>
                     sayac : {timer} </Text>
-            </View>
+            </View> */}
         </View>
     )
 }
